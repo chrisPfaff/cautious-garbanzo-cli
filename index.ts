@@ -1,0 +1,32 @@
+#! /usr/bin/env node
+
+import { Command } from "commander";
+import chalk from "chalk";
+import fs from "fs";
+const program = new Command();
+
+program
+  .name("cg-file-utility")
+  .description("CLI For File Utilities")
+  .version("0.0.1");
+
+program
+  .command("lines")
+  .description("List number of lines in a file")
+  .argument("<file>", "file to count lines")
+  .action((filePath: string) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
+      if (err) {
+        console.log(chalk.red(`Error reading file: ${err.message}`));
+        return;
+      } else {
+        const lines = data.split("\n").length;
+        console.log(
+          chalk.greenBright(`Number of lines in ${filePath}:`),
+          chalk.underline(chalk.green(`${lines}`))
+        );
+      }
+    });
+  });
+
+program.parse(process.argv);
