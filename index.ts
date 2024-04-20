@@ -29,4 +29,27 @@ program
     });
   });
 
+program
+  .command("words")
+  .description("List number of words in a file")
+  .argument("<file>", "file to count lines")
+  .action((filePath: string) => {
+    fs.readFile(filePath, "utf8", (err, data) => {
+      if (err) {
+        console.log(chalk.red(`Error reading file: ${err.message}`));
+        return;
+      } else {
+        const lines = data.split("\n");
+        let count = 0;
+        lines.forEach((line) => {
+          count += line.split(" ").length;
+        });
+        console.log(
+          chalk.greenBright(`Number of words in ${filePath}:`),
+          chalk.underline(chalk.green(`${count}`))
+        );
+      }
+    });
+  });
+
 program.parse(process.argv);
